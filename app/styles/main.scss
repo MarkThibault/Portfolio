@@ -1,5 +1,6 @@
 $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 // bower:scss
+@import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
 // endbower
 
 .browsehappy {
@@ -51,7 +52,12 @@ body {
 .jumbotron {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
-
+  h1 {
+    padding:10px;
+    background-color:#fff;
+    border-radius:5px;
+    border:1px solid #ccc;
+  }
   .btn {
     font-size: 21px;
     padding: 14px 24px;

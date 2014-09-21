@@ -10,11 +10,11 @@
 //   Libs
 // -------------------------------------
 
+// ----- Reset - Normalize.css ----- //
+// @import "libs/normalize";
+
 // ----- Variable overrides for Bootstrap and other libraries ----- //
-$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
-// bower:scss
-@import "bootstrap-sass-official/assets/stylesheets/bootstrap.scss";
-// endbower
+// @import "libs/library-variable-overrides";
 
 // ----- Compass - Setup: http://compass-style.org/help/ ----- //
 // ----- Run compass create on project root ----- //

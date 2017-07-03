@@ -2,27 +2,29 @@
   "name": "mark-thibault-com",
   "version": "4.0.0-alpha.1",
   "description": "Mark Thibault Portfolio",
-  "main": "src/index.ts",
-  "types": "src/index.d.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "npm prune",
+    "postinstall": "npm prune && npm run flow-typed",
     "build": "SET NODE_ENV=production && node ./node_modules/webpack/bin/webpack -p --progress",
     "build:dev": "node ./node_modules/webpack/bin/webpack --progress",
     "build:debug": "node ./node_modules/webpack/bin/webpack -d --display-reasons --display-chunks --display-modules --display-exclude --display-error-details",
-    "clean": "node clean.js",
+    "clean": "node clean-dist.js",
+    "clean:all": "node clean-all.js",
     "serve": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server --inline --open --progress --colors",
     "serve:prod": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server --inline --open -p --progress --colors",
     "watch": "node ./node_modules/webpack/bin/webpack --progress --watch",
     "watch:prod": "node ./node_modules/webpack/bin/webpack -p --progress --watch",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "flow": "flow",
+    "flow-typed": "node ./node_modules/flow-typed/dist/cli.js install"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/MarkThibault/Portfolio.git"
   },
   "keywords": [
-    "example"
+    "portfolio"
   ],
   "contributors": [
     "Mark Thibault"
@@ -34,39 +36,39 @@
     "registry": "https://github.com/MarkThibault/Portfolio.git"
   },
   "dependencies": {
-    "@types/angular": "^1.6.7",
-    "@types/node": "^7.0.5",
-    "angular": "1.5.8",
-    "angular-animate": "1.5.8",
-    "angular-checkbox": "git://github.com/MarkThibault/angular-checkbox.git",
-    "angular-dropdown": "git://github.com/MarkThibault/angular-dropdown.git",
-    "angular-filter": "git://github.com/MarkThibault/angular-filter.git",
-    "angular-header": "git://github.com/MarkThibault/angular-header.git",
-    "angular-input-group": "git://github.com/MarkThibault/angular-input-group.git",
-    "angular-modal": "git://github.com/MarkThibault/angular-modal.git",
-    "angular-session-timeout": "git://github.com/MarkThibault/angular-session-timeout.git",
-    "angular-toast-messaging": "git://github.com/MarkThibault/angular-toast-messaging.git"
+    "font-awesome": "^4.7.0",
+    "lato-font-face": "^1.1.0",
+    "opensans-npm-webfont": "0.0.2",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-router-dom": "^4.1.1"
   },
   "devDependencies": {
-    "angular-shared-scss": "git://github.com/MarkThibault/angular-shared-scss.git",
-    "awesome-typescript-loader": "3.1.3",
-    "baggage-loader": "0.2.4",
-    "css-loader": "^0.25.0",
-    "del": "2.2.2",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "file-loader": "^0.9.0",
-    "html-loader": "0.4.4",
-    "html-webpack-plugin": "^2.22.0",
-    "ngtemplate-loader": "1.3.1",
-    "node-sass": "^3.10.1",
-    "postcss-loader": "^1.0.0",
-    "raw-loader": "^0.5.1",
-    "sass-loader": "^4.0.2",
-    "style-loader": "^0.13.1",
-    "tslint": "^3.15.1",
-    "tslint-loader": "^2.1.5",
-    "typescript": "2.3.2",
-    "webpack": "1.13.2",
-    "webpack-dev-server": "^1.16.2"
+    "autoprefixer": "^7.1.1",
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.25.0",
+    "babel-loader": "^7.1.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-react": "^6.24.1",
+    "baggage-loader": "^0.2.4",
+    "css-loader": "^0.28.4",
+    "cssnano": "^3.10.0",
+    "extract-text-webpack-plugin": "^2.1.2",
+    "file-loader": "^0.11.2",
+    "flow-bin": "^0.49.1",
+    "flow-status-webpack-plugin": "^0.1.7",
+    "flow-typed": "^2.1.2",
+    "html-webpack-plugin": "^2.29.0",
+    "node-sass": "^4.5.3",
+    "postcss-cssnext": "^2.11.0",
+    "postcss-import": "^10.0.0",
+    "postcss-loader": "^2.0.6",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.0.0",
+    "webpack-dev-server": "^2.5.0"
   }
 }

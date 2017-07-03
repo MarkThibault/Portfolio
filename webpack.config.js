@@ -1,66 +1,106 @@
 var isProduction = process.argv.indexOf('-p') !== -1;
 var webpack = require('webpack');
+var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var autoprefixer = require('autoprefixer');
+var FlowStatusWebpackPlugin = require('flow-status-webpack-plugin');
+//var autoprefixer = require('autoprefixer');
 
 var appConfig = {
-  context: __dirname,
-  devtool: "inline-sourcemap",
+  devtool: "inline-source-map",
   entry: {
-    app: "./src/index.ts",
-    vendor: "./src/vendor.ts"
+    main: "./src/index.jsx",
+    vendor: "./src/vendor.jsx"
   },
   output: {
-    path: __dirname + "/dist",
-    filename: "./app.js"
+    path: path.resolve(__dirname, 'dist'),
+    filename: "[name].js"
   },
   module: {
-    preLoaders: [{
-      test: /\.js$/,
-      loader: 'baggage?[file].html&[file].css',
-      exclude: /index\.html/
-    }],
-    loaders: [{
-        test: /\.ts$/,
-        loader: 'awesome-typescript-loader!tslint'
-      },
+    rules: [
       {
-        test: /\.html$/,
-        loader: 'ngtemplate?relativeTo=' + __dirname + '!html',
-        exclude: /index\.html/
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        use: "babel-loader"
       },
       {
         test: /\.scss$|\.css$/,
-        loader: ExtractTextPlugin.extract('style', ['css', 'postcss', 'sass']),
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: [
+            { loader: 'css-loader', options: { importLoaders: 1 } },
+            'postcss-loader',
+            'sass-loader'
+          ],
+          publicPath: "/dist"
+        })
+      },
+      // {
+      //   test: /\.svg$/,
+      //   use: ['raw-loader']
+      // },
+      {
+        test: /\.(jpg|png|svg)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 25000,
+        },
       },
       {
-        test: /\.svg$/,
-        loader: 'raw-loader'
+        test: /\.jpe?g$|\.gif$|\.png$|\.wav$|\.mp3$|\.ico$|\.xml$/,
+        use: [{
+          loader:"file-loader",
+          options: {
+            name: "[name].[ext]",
+            publicPath: "assets/",
+            outputPath: "assets/"
+          }
+        }]
       },
       {
-        test: /\.jpe?g$|\.gif$|\.png$|\.woff$|\.ttf$|\.wav$|\.mp3$|\.ico$/,
-        loader: 'file-loader?name=[name].[ext]'
+        test: /\.(eot|ttf|woff|woff2|svg)$/,
+        use: [{
+          loader: 'url-loader',
+          options: {
+            publicPath: '/',
+            limit: 1024,
+            name: "fonts/[name].[ext]"
+          }
+        }]
       }
     ]
   },
-  postcss() {
-    return [autoprefixer];
-  },
+  // postcss() {
+  //   return [autoprefixer];
+  // },
   resolve: {
-    extensions: ['', '.js', '.ts']
+    modules: [
+      path.join(__dirname, "src"),
+      "node_modules"
+    ]
   },
   devServer: {
-    port: 8000,
+    port: 616,
+    contentBase: path.join(__dirname, "dist"),
     historyApiFallback: true
   },
   plugins: [
-    new webpack.optimize.CommonsChunkPlugin("vendor", "vendor.bundle.js"),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: function (module) {
+        return module.context && module.context.indexOf('node_modules') !== -1;
+      }
+    }),
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'manifest'
+    }),
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
-    new ExtractTextPlugin('./style.css', {
-      allChunks: true
+    new ExtractTextPlugin('styles.css'),
+    new FlowStatusWebpackPlugin({
+        restartFlow: false,
+        failOnError: true
     })
   ]
 };
@@ -68,14 +108,12 @@ var appConfig = {
 // production configurations
 if (isProduction || process.env.NODE_ENV === 'production') {
   appConfig.plugins.push(
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       mangle: false,
       sourcemap: false
     })
   );
-  appConfig.devtool = null;
+  appConfig.devtool = false;
 }
 
 // build
